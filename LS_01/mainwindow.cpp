@@ -49,7 +49,7 @@ void MainWindow::onPushButton_Clicked()
 
      d = b * b - 4 * a * c;
 
-         if (!a)
+         if (qFuzzyIsNull(a))
          {
              x1 = (-1) * (c / b);
              ui->lineEdit_4->setText("x1 = " + QString::number(x1));
@@ -62,7 +62,7 @@ void MainWindow::onPushButton_Clicked()
              ui->lineEdit_4->setText("x1 = " + QString::number(x1) +
                                      ", x2 = " + QString::number(x2));
          }
-         else if (d == 0)
+         else if (qFuzzyCompare(d, 0))
          {
              x1 = -(b / (2 * a));
              ui->lineEdit_4->setText("x1 = " + QString::number(x1));
@@ -76,19 +76,17 @@ void MainWindow::onPushButton_Clicked()
 
 void MainWindow::onPushButton_2_Clicked()
 {
-    bool isDegree = ui->radioButton_1->isChecked();
     bool isRedian = ui->radioButton_2->isChecked();
 
-    double a, b, angle, c, degrees = 0. ;
+    double a, b, angle, c, degrees;
 
     a = ui->lineEdit_5->text().toDouble();
     b = ui->lineEdit_6->text().toDouble();
     angle = ui->lineEdit_7->text().toDouble();
 
-    if(isDegree){degrees = angle;}
-    if(isRedian){degrees = qRadiansToDegrees(angle);}
+    degrees = (isRedian) ? qRadiansToDegrees(angle) : angle;
 
-    c = a * a + b * b - 2 * a * b * qCos(degrees / 180 * 3.1415934);
+    c = a * a + b * b - 2 * a * b * qCos(degrees / 180 * M_PI);
     c = (qPow(c, 1.0 / 2));
 
     ui->lineEdit_8->setText(QString::number(c));
